@@ -1,0 +1,33 @@
+{
+  "_notice": "Illustrative software-screening thresholds only. These are not ASTM F2291 limits.",
+  "rules": [
+    {
+      "name": "Illustrative positive-normal review",
+      "signal": "normal_g",
+      "comparison": "above",
+      "threshold": 4.0,
+      "units": "g"
+    },
+    {
+      "name": "Illustrative low-normal review",
+      "signal": "normal_g",
+      "comparison": "below",
+      "threshold": 0.25,
+      "units": "g"
+    },
+    {
+      "name": "Illustrative longitudinal review",
+      "signal": "longitudinal_g",
+      "comparison": "abs_above",
+      "threshold": 0.5,
+      "units": "g"
+    },
+    {
+      "name": "Illustrative onset-rate review",
+      "signal": "vector_jerk_gps",
+      "comparison": "above",
+      "threshold": 15.0,
+      "units": "g/s"
+    }
+  ]
+}

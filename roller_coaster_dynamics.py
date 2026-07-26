@@ -14,8 +14,6 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
-
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import LineCollection
@@ -169,9 +167,22 @@ def derivatives(
 
 
 def simulate(
-    track: Track, vehicle: Vehicle, max_time: float = 120.0
+    track: Track,
+    vehicle: Vehicle,
+    max_time: float = 120.0,
+    samples: int = 2400,
+    max_step: float = 0.03,
 ) -> dict[str, np.ndarray]:
-    """Integrate the coaster motion until it reaches the end of the track."""
+    """Integrate the coaster motion until it reaches the end of the track.
+
+    ``samples`` and ``max_step`` may be reduced for parameter sweeps. The
+    tighter defaults are retained for the nominal engineering time history.
+    """
+
+    if samples < 2:
+        raise ValueError("samples must be at least 2")
+    if max_step <= 0.0:
+        raise ValueError("max_step must be positive")
 
     def reached_end(_t: float, y: np.ndarray, *_args: object) -> float:
         return y[0] - track.q_end
@@ -189,7 +200,7 @@ def simulate(
         events=reached_end,
         rtol=1.0e-8,
         atol=1.0e-10,
-        max_step=0.03,
+        max_step=max_step,
         dense_output=True,
     )
     if not solution.success:
@@ -199,7 +210,7 @@ def simulate(
             "Vehicle did not reach the track end. Increase max_time or reduce losses."
         )
 
-    time = np.linspace(0.0, solution.t_events[0][0], 2400)
+    time = np.linspace(0.0, solution.t_events[0][0], samples)
     q, velocity = solution.sol(time)
     x, z, theta, curvature, metric = track.geometry(q)
 

@@ -77,6 +77,8 @@ The script saves a two-panel PNG showing:
 1. the 2D track colored by vehicle speed; and
 2. rider normal load versus distance traveled.
 
+![Example simulation output](coaster_results.png)
+
 ## License
 
 MIT
